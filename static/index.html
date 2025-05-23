@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bug Tracker</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 2rem;
+      /* background: linear-gradient(to right, #ece9e6, #ffffff); */
+      background-color: rgb(232, 204, 209);
+      color: #333;  
+    }
+
+    h1 {
+      text-align: center;
+      color: #222;
+      margin-bottom: 2rem;
+    }
+
+    form {
+      /* background: #ffffff; */
+      background-color: rgb(223, 167, 176);
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      max-width: 500px;
+      margin: 0 auto 2rem auto;
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+
+    input[type="text"], select {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.3rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    button {
+      margin-top: 1.5rem;
+      padding: 0.7rem 1.2rem;
+      font-size: 1rem;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    h2 {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    #bugList {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .bug {
+      background: #fff;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-left: 5px solid crimson;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease;
+    }
+
+    .bug:hover {
+      transform: scale(1.02);
+    }
+
+    .bug.resolved {
+      border-left-color: #28a745;
+      opacity: 0.8;
+      background-color: #e9fce9;
+    }
+
+    small {
+      display: block;
+      margin-top: 0.3rem;
+      font-size: 0.9rem;
+    }
+
+    .status {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🐞 Bug Tracker</h1>
+
+  <form id="bugForm">
+    <label for="title">Title:</label>
+    <input type="text" id="title" required />
+
+    <label for="description">Description:</label>
+    <input type="text" id="description" required />
+
+    <label for="severity">Severity:</label>
+    <select id="severity">
+      <option>low</option>
+      <option>medium</option>
+      <option>high</option>
+    </select>
+
+    <button type="submit">Add Bug</button>
+  </form>
+
+  <h2>Reported Bugs</h2>
+  <div id="bugList"></div>
+
+  <script>
+    const API = '/bugs';
+
+    const bugForm = document.getElementById('bugForm');
+    const bugList = document.getElementById('bugList');
+
+    bugForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      const data = {
+        title: document.getElementById('title').value,
+        description: document.getElementById('description').value,
+        severity: document.getElementById('severity').value
+      };
+
+      await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      bugForm.reset();
+      loadBugs();
+    });
+
+    async function loadBugs() {
+      const res = await fetch(API);
+      const bugs = await res.json();
+
+      bugList.innerHTML = '';
+      bugs.forEach(bug => {
+        const div = document.createElement('div');
+        div.className = `bug ${bug.status === 'resolved' ? 'resolved' : ''}`;
+        div.innerHTML = `
+          <strong>ID: ${bug.id} - ${bug.title}</strong><br>
+          ${bug.description}<br>
+          <small>Severity: ${bug.severity}</small>
+          <small class="status">Status: <span style="color: ${bug.status === 'resolved' ? 'green' : 'crimson'}">${bug.status}</span></small>
+        `;
+        bugList.appendChild(div);
+      });
+    }
+
+    loadBugs();
+  </script>
+
+</body>
+</html>
