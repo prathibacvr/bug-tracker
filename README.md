@@ -70,7 +70,7 @@ DELETE	/bugs/<id>	Delete a bug (e.g., mark as fixed permanently)	None	Use Postma
 - Method: PUT
 - URL: http://localhost:5000/bugs/<bug_id> (replace <bug_id> with actual bug ID)
 - Body (raw JSON):
-  '''json
+  ```json
   {
     "status": "resolved"
   }
