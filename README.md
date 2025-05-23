@@ -56,12 +56,15 @@ A simple Bug Tracking web application with backend REST API and a basic frontend
     http://localhost:5000/
 ---
 
-API Endpoints
-Method	Endpoint	Description	Request Body Example	Notes
-GET	/bugs	Get all bugs	None	View all bugs
-POST	/bugs	Add a new bug	{ "title": "Bug title", "description": "Details", "severity": "low" }	Add bug via frontend or API
-PUT	/bugs/<id>	Update bug status to resolved	{ "status": "resolved" }	Use Postman or REST client to update status
-DELETE	/bugs/<id>	Delete a bug (e.g., mark as fixed permanently)	None	Use Postman to delete bug
+## API Endpoints
+
+| Method | Endpoint       | Description                      | Request Body Example                                                                 | Notes                                         |
+|--------|----------------|----------------------------------|--------------------------------------------------------------------------------------|----------------------------------------------|
+| GET    | `/bugs`        | Get all bugs                     | None                                                                                 | View all bugs                                 |
+| POST   | `/bugs`        | Add a new bug                    | `{ "title": "Bug title", "description": "Details", "severity": "low" }`             | Add bug via frontend or API                   |
+| PUT    | `/bugs/<id>`   | Update bug status to resolved    | `{ "status": "resolved" }`                                                           | Use Postman or REST client to update status   |
+| DELETE | `/bugs/<id>`   | Delete a bug                     | None                                                                                 | Use Postman to delete bug                     |
+
 
  ---
 
